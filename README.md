@@ -189,8 +189,8 @@ Villanova University makes every reasonable effort to allow members of the commu
 | 10/9/24 | Midterm Exam |  | | | |
 | 10/14/24 | Fall Break |  | | | |
 | 10/16/24 | Fall Break |  |  | | |
-| 10/21/24 | Regression 1 | Interpreting output and evaluating model |  | HW 12 | PS 6 |
-| 10/23/24 | Regression 2 | Interpreting output and evaluating model | | HW 13 | |
+| 10/21/24 | Regression 1 | Interpreting output and evaluating model | [Lecture 12](https://rweldzius.github.io/PSC4175_F2024/Lectures/psc4175_lecture_12_slides.html) | [HW 12](https://github.com/rweldzius/PSC4175_F2024/blob/main/Homeworks/psc4175_hw_12.Rmd) | [PS 6](https://github.com/rweldzius/psc4175_F2024/blob/main/Psets/psc4175_pset_6.Rmd) |
+| 10/23/24 | Regression 2 | Interpreting output and evaluating model | [Lecture 13](https://rweldzius.github.io/PSC4175_F2024/Lectures/psc4175_lecture_13_slides.html) | [HW 13](https://github.com/rweldzius/PSC4175_F2024/blob/main/Homeworks/psc4175_hw_13.Rmd) | |
 | 10/28/24 | Regression 3 | Multiple regression, categorical Xs | | HW 14 |  |
 | 10/30/24 | Review Session | Regression | |  | |
 | 11/4/24 | Classification 1 | The concept of logistic regression |  | HW 15 | PS 7 |
