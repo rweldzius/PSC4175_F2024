@@ -323,9 +323,7 @@ pFancy
 
 ---
 
-# Look with `plotly`
-
-- If curious, can use `plotly` to see outliers
+# Look with `plotly` to see outliers
 
 ```{r,warning=F,message=F}
 require(plotly)
@@ -454,8 +452,11 @@ exp(1.26107)
 ```{r}
 # Wrangle data to drop missingness!
 mv_analysis <- mv %>% drop_na(gross_log,budget_log)
+
 m <- lm(gross_log ~ budget_log,data = mv_analysis)
+
 mv_analysis$predictions <- predict(m)
+
 mv_analysis$errors <- mv_analysis$gross_log - mv_analysis$predictions
 
 summary(mv_analysis$errors)
@@ -570,19 +571,19 @@ mv_analysis %>%
 
 - **E**rror ( $\varepsilon$ ): actual outcome ( $Y_i$ ) - predicted outcome ( $\hat{Y}_i$ )
 
-  - The "distance" between the data and the model
+  - The "distance" between the data and the model: $Y_i - \hat{Y}_i$
   
 --
 
 - **S**quared: $\varepsilon^2$
 
-  1. Makes all values positive
+  1. Makes all values positive: $(Y_i - \hat{Y}_i)^2$
   
   2. .blue[Exaggerates] the presence of larger errors
   
 --
 
-- **M**ean: average these squared errors
+- **M**ean: average these squared errors: $\frac{1}{n}\sum_{i = 1}^n(Y_i - \hat{Y}_i)^2$
 
 - **R**oot: take their square root (.blue[un-exaggerate])
 
