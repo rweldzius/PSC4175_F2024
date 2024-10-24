@@ -571,19 +571,19 @@ mv_analysis %>%
 
 - **E**rror ( $\varepsilon$ ): actual outcome ( $Y_i$ ) - predicted outcome ( $\hat{Y}_i$ )
 
-  - The "distance" between the data and the model: $Y_i - \hat{Y}_i$
+  - The "distance" between the data and the model
   
 --
 
 - **S**quared: $\varepsilon^2$
 
-  1. Makes all values positive: $(Y_i - \hat{Y}_i)^2$
+  1. Makes all values positive
   
   2. .blue[Exaggerates] the presence of larger errors
   
 --
 
-- **M**ean: average these squared errors: $\frac{1}{n}\sum_{i = 1}^n(Y_i - \hat{Y}_i)^2$
+- **M**ean: average these squared errors
 
 - **R**oot: take their square root (.blue[un-exaggerate])
 
@@ -681,8 +681,11 @@ $${\color{red}R}MSE = \sqrt{(MSE)}$$
 
 ```{r}
 e <- mv_analysis$gross_log - mv_analysis$predictions
+
 se <- e^2
+
 mse <- mean(se)
+
 rmse <- sqrt(mse)
 # Or
 (rmseBudget <- sqrt(mean(mv_analysis$errors^2)))

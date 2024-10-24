@@ -2,7 +2,7 @@
 title: "Problem Set 6"
 subtitle: "Multivariate Visualization"
 author: "[YOUR NAME]"
-institute: "Vanderbilt University"
+institute: "Villanova University"
 date: "Due Date: 2024-10-25"
 output:
   html_document: default
@@ -16,11 +16,11 @@ knitr::opts_chunk$set(error=TRUE)
 ## Getting Set Up
 
 Open `RStudio` and create a new RMarkDown file (`.Rmd`) by going to `File -> New File -> R Markdown...`.
-Accept defaults and save this file as `[LAST NAME]_ps7.Rmd` to your `code` folder.
+Accept defaults and save this file as `[LAST NAME]_ps6.Rmd` to your `code` folder.
 
-Copy and paste the contents of this `.Rmd` file into your `[LAST NAME]_ps7.Rmd` file. Then change the `author: [Your Name]` to your name.
+Copy and paste the contents of this `.Rmd` file into your `[LAST NAME]_ps6.Rmd` file. Then change the `author: [Your Name]` to your name.
 
-We will be using a new dataset called `youtube_individual.rds` which can be found on the course [github page](https://github.com/rweldzius/PSC7000_F2024/raw/main/Data/youtube_individual.rds). The codebook for this dataset is produced below. All ideology measures are coded such that negative values indicate more liberal content and positive values indicate more conservative content.
+We will be using a new dataset called `youtube_individual.rds` which can be found on the course [github page](https://github.com/rweldzius/PSC4175_F2024/raw/main/Data/youtube_individual.rds). The codebook for this dataset is produced below. All ideology measures are coded such that negative values indicate more liberal content and positive values indicate more conservative content.
 
 | Name           | Description                                                                               |
 |----------------|:------------------------------------------------------------------------------------------|
@@ -43,7 +43,7 @@ All of the following questions should be answered in this `.Rmd` file. There are
 This problem set is worth 5 total points, plus **one** extra credit question. However, there are also additional opportunities for additional points in problem 5 and the extra credit question itself. Note that these additional points are **very hard**. I encourage you all to attempt all extra credit, but don't worry if you don't get the super hard ones. 
 
 The point values for each question are indicated in brackets below. To receive full credit, you must have the correct code. In addition, some questions ask you to provide a written response in addition to the code.
-All of the following questions should be answered in this `.Rmd` file. There are code chunks with incomplete code that need to be filled in. To submit, compile (i.e., `knit`) the completed problem set and upload the PDF file to Dropbox on Friday by midnight. Instructions for how to compile the output as a PDF can be found in [Problem Set 0](https://github.com/rweldzius/PSC7000_F2024/blob/main/Psets/ds1000_pset_0.pdf) and in this [gif tutorial](https://github.com/rweldzius/PSC7000_F2024/blob/main/Psets/save_as_pdf.gif). 
+All of the following questions should be answered in this `.Rmd` file. There are code chunks with incomplete code that need to be filled in. To submit, compile (i.e., `knit`) the completed problem set and upload the PDF file to Dropbox on Friday by midnight. Instructions for how to compile the output as a PDF can be found in [Problem Set 0](https://github.com/rweldzius/PSC7000_F2024/blob/main/Psets/ds1000_pset_0.pdf) and in this [gif tutorial](https://github.com/rweldzius/PSC4175_F2024/blob/main/Psets/save_as_pdf.gif). 
 
 You will be deducted 1 point for each day late the problem set is submitted, and 1 point for failing to submit in the correct format.
 
