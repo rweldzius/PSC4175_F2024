@@ -196,13 +196,13 @@ Villanova University makes every reasonable effort to allow members of the commu
 | 11/4/24 | Classification 1 | The concept of logistic regression |  | HW 15 | PS 7 |
 | 11/6/24 | Classification 2 | Interpreting output and evaluating model | | HW 16 |  |
 | 11/11/24 | Classification 3 | Interpreting output and evaluating model |  | HW 17 |  |
-| 11/13/24 | Clustering | k-means clustering |  | HW 18 | |
-| 11/18/24 | NLP 1 | k-means clustering on text |  | HW 19 | PS 8 |
-| 11/20/24 | NLP 2 | Sentiment analysis |  | | |
-| 11/25/24 | Review Session | Clustering |  | | |
+| 11/13/24 | Guest Lecture | TBD |  |  | |
+| 11/18/24 | Clustering | k-means clustering |  | HW 18 | PS 8 |
+| 11/20/24 | NLP 1 | k-means clustering on text | HW 19  | | |
+| 11/25/24 | NLP 2 | Sentiment analysis |  | | |
 | 11/27/24 | No Class |  |  | | |
-| 12/2/24 | Ethics | The risks of rapid technological change |  | | |
-| 12/4/24 | Discuss final projects | |  | | |
+| 12/2/24 | Review Session & discuss final projects | Clustering |  | | |
+| 12/4/24 | In-class work on final projects | |  | | |
 | 12/9/24 | Final project presentations | |  | | |
 | 12/11/24 | Final project presentations |  |  | | |
 | 12/18/24 | Final Exam Due | |  | | |
