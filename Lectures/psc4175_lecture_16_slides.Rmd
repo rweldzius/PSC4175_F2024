@@ -555,18 +555,3 @@ p
   - No: conditional means are more susceptible to **overfitting**
   
 --
-
-- How would you re-evaluate these models-X-predictors to account for overfitting?
-
---
-  
-- Go to gosocrative.com and take the **15th** quiz
-
---
-
-- **Homework:**
-
-  - Problem Set 7
-  
-  - HW 16
-
