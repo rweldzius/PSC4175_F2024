@@ -195,7 +195,7 @@ Villanova University makes every reasonable effort to allow members of the commu
 | 10/30/24 | Review Session | Regression | |  | |
 | 11/4/24 | Classification 1 | The concept of logistic regression | [Lecture 15](https://rweldzius.github.io/PSC4175_F2024/Lectures/psc4175_lecture_15_slides.html) | [HW 15](https://github.com/rweldzius/PSC4175_F2024/blob/main/Homeworks/psc4175_hw_15.Rmd) | [PS 7](https://github.com/rweldzius/psc4175_F2024/blob/main/Psets/psc4175_pset_7.Rmd)  |
 | 11/6/24 | Classification 2 | Interpreting output and evaluating model |[Lecture 16](https://rweldzius.github.io/PSC4175_F2024/Lectures/psc4175_lecture_16_slides.html) | [HW 16](https://github.com/rweldzius/PSC4175_F2024/blob/main/Homeworks/psc4175_hw_16.Rmd) |  |
-| 11/11/24 | Classification 3 | Interpreting output and evaluating model |  | [HW 17](https://github.com/rweldzius/PSC4175_F2024/blob/main/Homeworks/psc4175_hw_17.Rmd) |  |
+| 11/11/24 | Classification 3 | Interpreting output and evaluating model | [Lecture 17](https://rweldzius.github.io/PSC4175_F2024/Lectures/psc4175_lecture_17_slides.html) | [HW 17](https://github.com/rweldzius/PSC4175_F2024/blob/main/Homeworks/psc4175_hw_17.Rmd) |  |
 | 11/13/24 | Guest Lecture | TBD |  |  | |
 | 11/18/24 | Clustering | k-means clustering |  | HW 18 | PS 8 |
 | 11/20/24 | NLP 1 | k-means clustering on text |  | HW 19 | |
