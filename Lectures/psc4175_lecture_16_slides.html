@@ -26,7 +26,7 @@ class: center, middle, inverse, title-slide
 ### Villanova University
 ]
 .date[
-### Slides Updated: 2024-11-06
+### Slides Updated: 2024-11-11
 ]
 
 ---
@@ -569,7 +569,7 @@ results &lt;- roc_auc(data = toEval,truth,prob_won) %&gt;%
 p &lt;- results %&gt;%
   ggplot(aes(x = reorder(model,.estimate),
              y = reorder(predictors,.estimate),
-             fill = .estimate,label = round(.estimate,2))) + 
+             fill = .estimate,label = round(.estimate,3))) + 
   geom_tile() + 
   scale_fill_continuous(low = 'grey90',high = 'darkred') + 
   geom_text() + 

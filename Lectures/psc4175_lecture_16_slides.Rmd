@@ -521,7 +521,7 @@ results <- roc_auc(data = toEval,truth,prob_won) %>%
 p <- results %>%
   ggplot(aes(x = reorder(model,.estimate),
              y = reorder(predictors,.estimate),
-             fill = .estimate,label = round(.estimate,2))) + 
+             fill = .estimate,label = round(.estimate,3))) + 
   geom_tile() + 
   scale_fill_continuous(low = 'grey90',high = 'darkred') + 
   geom_text() + 
