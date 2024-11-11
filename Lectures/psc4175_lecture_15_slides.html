@@ -26,7 +26,7 @@ class: center, middle, inverse, title-slide
 ### Villanova University
 ]
 .date[
-### Slides Updated: 2024-11-04
+### Slides Updated: 2024-11-05
 ]
 
 ---
@@ -532,37 +532,6 @@ tidy(mLM) %&gt;% # This would be the same as summary(mLM)
 ## 4 mental_statesober  0.155     0.0281       5.53       0
 ```
 
----
-
-# Linear Regression
-
-
-``` r
-mLM &lt;- lm(won ~ scale(hits) + scale(accuracy) + mental_state,fn)
-tidy(mLM)
-```
-
-```
-## # A tibble: 4 × 5
-##   term              estimate std.error statistic  p.value
-##   &lt;chr&gt;                &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
-## 1 (Intercept)          0.224    0.0201     11.1  4.65e-27
-## 2 scale(hits)          0.147    0.0148      9.91 4.14e-22
-## 3 scale(accuracy)     -0.100    0.0149     -6.72 3.07e-11
-## 4 mental_statesober    0.155    0.0281      5.53 4.25e- 8
-```
-
-``` r
-fn %&gt;%
-  summarise_at(vars(hits,accuracy),function(x) round(sd(x),1))
-```
-
-```
-## # A tibble: 1 × 2
-##    hits accuracy
-##   &lt;dbl&gt;    &lt;dbl&gt;
-## 1  22.7      0.1
-```
 
 ---
 
@@ -761,7 +730,7 @@ toplot %&gt;%
   geom_line()
 ```
 
-&lt;img src="psc4175_lecture_15_slides_files/figure-html/unnamed-chunk-25-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="psc4175_lecture_15_slides_files/figure-html/unnamed-chunk-24-1.png" style="display: block; margin: auto;" /&gt;
 ]
 
 ---
@@ -779,7 +748,7 @@ toplot %&gt;%
   geom_line()
 ```
 
-&lt;img src="psc4175_lecture_15_slides_files/figure-html/unnamed-chunk-26-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="psc4175_lecture_15_slides_files/figure-html/unnamed-chunk-25-1.png" style="display: block; margin: auto;" /&gt;
 ]
 
 
@@ -826,7 +795,7 @@ p &lt;- toplot %&gt;%
 p
 ```
 
-&lt;img src="psc4175_lecture_15_slides_files/figure-html/unnamed-chunk-28-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="psc4175_lecture_15_slides_files/figure-html/unnamed-chunk-27-1.png" style="display: block; margin: auto;" /&gt;
 
 --
 
@@ -874,7 +843,7 @@ roc_auc(data = fn %&gt;%
   
 --
 
-- AUC can be interpreted like numeric grades at Vandy (and for this class)
+- AUC can be interpreted like numeric grades at Villanova (and for this class)
 
   - 0.95+ is amazing
   
@@ -962,7 +931,7 @@ rocRes %&gt;%
   ggridges::theme_ridges() + labs(x = 'AUC',y = 'Regression Model')
 ```
 
-&lt;img src="psc4175_lecture_15_slides_files/figure-html/unnamed-chunk-33-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="psc4175_lecture_15_slides_files/figure-html/unnamed-chunk-32-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 
@@ -1023,7 +992,7 @@ cvRes %&gt;%
   geom_boxplot() + labs(x = 'Distribution of AUC',y = 'Specification')
 ```
 
-&lt;img src="psc4175_lecture_15_slides_files/figure-html/unnamed-chunk-35-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="psc4175_lecture_15_slides_files/figure-html/unnamed-chunk-34-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 

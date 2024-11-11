@@ -413,16 +413,6 @@ tidy(mLM) %>% # This would be the same as summary(mLM)
   mutate_at(vars(-term),function(x) round(x,5))
 ```
 
----
-
-# Linear Regression
-
-```{r}
-mLM <- lm(won ~ scale(hits) + scale(accuracy) + mental_state,fn)
-tidy(mLM)
-fn %>%
-  summarise_at(vars(hits,accuracy),function(x) round(sd(x),1))
-```
 
 ---
 
