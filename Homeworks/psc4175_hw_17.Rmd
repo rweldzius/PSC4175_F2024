@@ -25,7 +25,7 @@ This is what dating sites (e.g., e-harmony) do when they try to figure out which
 
 One thing that will become quickly apparent is that how we measure something can have profound implications on what it means - especially if we have no theory to guide us in the organization/analysis of data.  Sometimes data exploration = measurement = discovery. 
 
-It is also important to note that nothing we are doing is causal -- the algorithm is silent as to why the relationships exist.  It is equally important to note that the analysis is descriptive, not predictive.  This is a critical point with profound implications -- if you identify segments in your data and they take proactive steps using that information, the steps you take make affect how future data is clustered.  
+It is also important to note that nothing we are doing is causal -- the algorithm is silent as to why the relationships exist.  It is equally important to note that the analysis is descriptive, not predictive.  This is a critical point with profound implications -- if you identify segments in your data and they take proactive steps using that information, the steps you take may affect how future data is clustered.  
 
 - Clustering algorithm: discover groups of observations ``similar" to each other.
 - Unsupervised learning vs. Supervised learning.
@@ -36,7 +36,7 @@ The algorithm we are going to use is one of the earliest implementations of clus
 The procedure used by the k-means clustering algorithm consists of several steps"
 
 1. The data scientist chooses the number of clusters/segments they wish to identify in the data of interest.  The number of clusters is given by `K` -- hence the name `kmeans`.
-2. The computer randomly chooses a initial centroids of `K` clusters in the multidimensional space (where the number of dimensions is the number of variables).
+2. The computer randomly chooses initial centroids of `K` clusters in the multidimensional space (where the number of dimensions is the number of variables).
 3. Given the choice of `K` centroids, the computer assigns each observation to the cluster whose centroid is the closest (in terms of Euclidian distance).  
 4. Given that assignment, the computer computes a new centroid for each cluster using the within-cluster mean of the corresponding variable.
 5. Repeat Steps 3 and 4 until the cluster assignments no longer change.
@@ -54,17 +54,17 @@ $$y_1 = \sum_i^{n_1} \frac{y_i}{n_1}$$
 $$x_2 = \sum_i^{n_2} \frac{x_i}{n_2}$$
 $$y_2 = \sum_i^{n_2} \frac{y_i}{n_2}$$
 
-Now, using these new values for $(x_1,y_1)$ for the centroid of cluster 1 and $(x_2,y_2)$ for the centroid of cluster 2 we reclassify all the observations to allocate each observation to the cluster with the closest centroid.  We then recalculate the centroid for each cluster after this reallocation and then we and iterate over these two steps until no data points change their cluster assignment.
+Now, using these new values for $(x_1,y_1)$ for the centroid of cluster 1 and $(x_2,y_2)$ for the centroid of cluster 2 we reclassify all the observations to allocate each observation to the cluster with the closest centroid.  We then recalculate the centroid for each cluster after this reallocation and then we iterate over these two steps until no data points change their cluster assignment.
 
 Given this, how sensitive is this to the scale of the variables?  What does that imply?
 
 # Applications to Elections and Election Night
 
-Predicting elections requires using votes that are counted to make predictions for ``similar counties." There are lots of ways to determine similarity based on past voting behavior (and demographics).
+Predicting elections requires using votes that are counted to make predictions for "similar counties." There are lots of ways to determine similarity based on past voting behavior (and demographics).
 
 Entire books have been written that try to determine how many "Americas" there are.  For example...
 
-![](figs/PatchworkNation.png){width=30%}
+![](../Lectures/figs/PatchworkNation.jpg){width=30%}
 
 And many "quizzes" are produced to determine what type of voter you are (more on this later!).  For example: 
 [quiz from the NY Times](https://www.nytimes.com/interactive/2021/09/08/opinion/republicans-democrats-parties.html).
@@ -178,11 +178,11 @@ The values associated with `withinss` are the within sum of squares for all obse
 
 $$\sum_i^{n_1} (\bar{T}_1 - T_i)^2 + (\bar{C}_1 - C_i)^2$$
 
-if we use $T_1$ to denote the mean of support for Trump in the $n_1$ counties allocated to cluster 1 and $C_1$ to denote the mean support for Clinton in those $n_1$ counties. We will return to this later. 
+if we use $\bar{T}_1$ to denote the mean of support for Trump in the $n_1$ counties allocated to cluster 1 and $\bar{C}_1$ to denote the mean support for Clinton in those $n_1$ counties. We will return to this later. 
 
-One important thing to note is that `kmeans` starts the algorithm by randomly choosing a centroid for each cluster and then iterating until no classifications change cluster.  As a result, the clusters we identify can depend on the initial choices and there is nothing to ensure that the results a "optimal" in a global sense.  The classification is conditional on the initial start and the optimization is "local" and relative to that initial choice. So make sure you always set a seed!
+One important thing to note is that `kmeans` starts the algorithm by randomly choosing a centroid for each cluster and then iterating until no classifications change cluster.  As a result, the clusters we identify can depend on the initial choices and there is nothing to ensure that this results in an "optimal" in a global sense.  The classification is conditional on the initial start and the optimization is "local" and relative to that initial choice. So make sure you always set a seed!
 
-_*SELF_TEST* Do a new clustering with 4 centroids called `florida.me` and look at the contests of each cluster using tidy:
+*SELF_TEST* Do a new clustering with 4 centroids called `florida.me` and look at the contests of each cluster using tidy:
 
 ```{r}
 florida.me <- kmeans(rawvote, centers=4)
@@ -201,7 +201,7 @@ fl.cluster2 <- kmeans(rawvote,centers=2) # new clustering
 Now lets compare how the clusters found in `fl.cluster1` compare to the clusters found in the new clustering (`fl.cluster2`) using the`table` function.
 
 ```{r}
-table(fl.cluster1$cluster, fl.cluster2$cluster) # compare clusters
+table(fl.cluster1$cluster,fl.cluster2$cluster) # compare clusters
 ```
 
 So we can see the classification is exactly flipped.  The observations are still largely clustered into the same clustering, but the labels of those clusters is changed.  Even though the same information is recovered in both clusterings, the labels of the clusters has changed.  This point is essential for replication!
@@ -247,7 +247,7 @@ ggplotly(gg,tooltip = "text")
 ```
 
 
-Recall that there is no global minimization being done in this algorithm -- all we are doing is starting with a randomly chosen centroid and then doing a (local) minimization given those start value.  As a result, you can get different classifications with different start values. Here is a simple example that again shows the sensitivity to start values. 
+Recall that there is no global minimization being done in this algorithm -- all we are doing is starting with a randomly chosen centroid and then doing a (local) minimization given those start values.  As a result, you can get different classifications with different start values. Here is a simple example that again shows the sensitivity to start values. 
 
 ```{r}
 set.seed(42)
@@ -344,7 +344,7 @@ cluster.mix2 <- kmeans(rawvote3.scale,centers=2,nstart=25)
 tidy(cluster.mix2)
 ```
 
-How compare? Start with the normalized vs. unnormalized clustering (i.e., same variables but different scale).
+How to compare? Start with the normalized vs. unnormalized clustering (i.e., same variables but different scale).
 ```{r}
 table(Normalized = cluster.mix2$cluster, 
       Unnormalized = cluster.mix$cluster)
@@ -359,7 +359,7 @@ table(Normalized = cluster.mix2$cluster,
 
 This means...
 
-# More Data! More Clusters ?
+# More Data! More Clusters?
 
 Perhaps we need more data. Lets get all of the county (or town) level data from 2004 up through 2020.  Let's focus on Florida again.
 
@@ -378,7 +378,7 @@ rawvote <- dat.fl %>%
   drop_na()
 ```
 
-Again we can start by visualizing the relationship.  Since we can only think in 2 dimensions, lets' look at some.
+Again we can start by visualizing the relationship.  Since we can only think in 2 dimensions, let's look at some.
 
 ```{r}
 rawvote %>%
@@ -422,7 +422,7 @@ kcluster.fl <-
   )
 ```
 
-The above code uses the `map` function which is how we can apply a function across an index.  So in line 337 we are going to take `map` to apply the sequence of `K` values we defined running from 1 to 10 the `kmeans()` algorithm applied to the `rawvotes` tibble.  The `.x` in the line reveals where we are going to substitute the value being mapped.  So the object `kcluster` is going to be a list of 10 elements -- each list element being a `kmeans` object associated with the choice of `K` centers.
+The above code uses the `map` function which is how we can apply a function across an index.  So in line 419 we are going to take `map` to apply the sequence of `K` values we defined running from 1 to 10 the `kmeans()` algorithm applied to the `rawvotes` tibble.  The `.x` in the line reveals where we are going to substitute the value being mapped.  So the object `kcluster` is going to be a list of 10 elements -- each list element being a `kmeans` object associated with the choice of `K` centers.
 
 We then map the `tidy` function to the list of `kcluster` we just created -- creating a list called `tidysummary` where each element is the summary associated with the kth clustering. We next create a tibble that augments the original data being clustered -- `rawvotes` with the cluster label associated with the kth clustering.  (But remember that the meaning of those labels is not fixed!)
 
@@ -595,7 +595,7 @@ dat.cluster %>%
 
 We could also merge in county-level demographic data (using Census `fips_code`) and see how things change if we cluster counties based on their demographic features.  But the important thing to remember is that because this is an unsupervised method there is no way to determine if the clustering is what you want it to be. Also recall that the scale matters. The computer will always find the number of clusters you ask for, but whether those clusters mean anything is up to you, the data analyst to determine.  This is where critical thinking is essential -- what variables are appropriate to include?  And how do you interpret the meaning of the clusters given the distribution of data within those clusters?
 
-# Even More Data! Even More Clusters ?
+# Even More Data! Even More Clusters?
 
 What if we looked at all counties? Note we are going to drop some states that do not record vote by counties (e.g., Maine) as well as others for which we are lacking data for some years (e.g., Alaska).  Let's create a tibble containing just the data called `rawdata` and drop all missing data.
 
