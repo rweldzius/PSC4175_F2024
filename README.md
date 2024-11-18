@@ -201,7 +201,7 @@ Villanova University makes every reasonable effort to allow members of the commu
 | 11/20/24 | NLP 1 | k-means clustering on text |  | HW 19 | |
 | 11/25/24 | NLP 2 | Sentiment analysis |  | | |
 | 11/27/24 | No Class |  |  | | |
-| 12/2/24 | Review Session & discuss final projects | Clustering |  | | |
+| 12/2/24 | Review Session & discuss final projects | |  | | |
 | 12/4/24 | In-class work on final projects | |  | | |
 | 12/9/24 | Final project presentations | |  | | |
 | 12/11/24 | Final project presentations |  |  | | |
