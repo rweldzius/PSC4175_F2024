@@ -541,7 +541,7 @@ So `kmeans` took a matrix where each column was a different variable that we wer
 castdtm <- cast_dtm(data = dtm.tfidf, document = Tweeting.date, term = word, value = tf_idf)
 ```
 
-And now we can run $k$-means on this object! How many `centers` (clusters or $K$) should we choose? This all depends on how many different things we think Trump talks about. For now, we will just use 50. However, recall that we should create an "elbow" plot like we did in the previous lecture, and choose $k$ based on where the reductions in errors are smaller.
+And now we can run $k$-means on this object! How many `centers` (clusters or $K$) should we choose? This all depends on how many different things we think Trump talks about. For now, we will just use 50. However, recall that we should create an "elbow" plot like we did in the previous lecture, and choose $k$ based on where the reductions in errors are smaller. (NB: this may take some time on your computer if it is low on memory.)
 
 ```{r}
 set.seed(42)
