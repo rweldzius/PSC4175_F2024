@@ -665,7 +665,17 @@ p
   distinct() %>%
   arrange(desc(size)) %>%
     slice(1:5))
+```
 
+---
+
+# Looking at clusters
+
+- What are these clusters?
+
+- Let's look at the most popular topics
+
+```{r}
 p <- km_out_tidy %>%
   filter(cluster %in% tops$cluster) %>%
   group_by(cluster) %>%
@@ -722,7 +732,6 @@ p <- totWSS %>%
 ```{r}
 p
 ```
-
 
 
 ---

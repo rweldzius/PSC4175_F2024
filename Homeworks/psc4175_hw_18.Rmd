@@ -50,7 +50,7 @@ tweets <- trumptweets %>%
          Tweeting.year = as.factor(format(date, format = "%Y")))
 ```
 
-First thing we always do is to see what we have so we know what we are working with and what we have to do to answer the questions we want to answer. Nese we select the variables we want and practice creating some time objects for future use.  (We are using the `lubridate` package for the date manipulations.)  Note that `date` had the time of the tweet in UTC so we used the `with_tz` function from `lubridate` package to change the time zone to Eastern Standard Time (as that is where Washington, DC, Bedminster, NJ, and Mar Lago, FL are located) -- note that dates are also changed if the timezone change crosses days (a benefit of saving the object as a date object!).
+First thing we always do is to see what we have so we know what we are working with and what we have to do to answer the questions we want to answer. Then we select the variables we want and practice creating some time objects for future use.  (We are using the `lubridate` package for the date manipulations.)  Note that `date` had the time of the tweet in UTC so we used the `with_tz` function from `lubridate` package to change the time zone to Eastern Standard Time (as that is where Washington, DC, Bedminster, NJ, and Mar Lago, FL are located) -- note that dates are also changed if the timezone change crosses days (a benefit of saving the object as a date object!).
 
 
 Because our data is larger than usual, we want to keep an eye on how much is loaded into memory.  Since we no longer need `trumptweets` let us remove it via `rm()`.
@@ -73,7 +73,7 @@ After using the data -- and conditional means -- to answer these descriptive que
 4. What were the topics that Trump was tweeting about before and after becoming president? (`kmeans`)
 5. What were the dominant "sentiments" being expressed by Trump and how did that change after becoming president. (Sentiment Analysis)
 
-Note that we are going to compare pre-post presidency but you have the tools, and also the code based on what we do today, to do much finer-grained analyses.  You can compare how the behavior changes each year.  Or each month?  Or in response to his impeachments.  Or how his activity in the 2016 campaign compares to his activity in his 2020 campaign.  Or dive into the 2016 campaign and see how he acted and reacted through the Republican nomination during his rise to the Republican nomination.  There are many, many fascinating (and largely unanswered) questions that you should be empowered to be able to do based on what we cover!  We will dive deeper a few times, but largely to illustrate the amazing stuff that you can do.
+Note that we are going to compare pre-post presidency but you have the tools, and also the code based on what we do today, to do much finer-grained analyses.  You can compare how the behavior changes each year.  Or each month?  Or in response to his impeachments.  Or how his activity in the 2016 campaign compares to his activity in his 2020 campaign.  Or dive into the 2016 campaign and see how he acted and reacted during his rise to the Republican nomination.  There are many, many fascinating (and largely unanswered) questions that you should be empowered to be able to do based on what we cover!  We will dive deeper a few times, but largely to illustrate the amazing stuff that you can do.
 
 So let's get to it!
 
@@ -105,6 +105,7 @@ tweets %>%
   labs(x="Date",y="Average Retweets",title="Tweeting by Trump") +
   scale_y_continuous(label=comma)
 ```
+
 Clearly there is a lot of variation here. Which tweets were re-tweeted the most?  
 
 ```{r}
@@ -159,8 +160,9 @@ tweets %>%
   group_by(Tweeting.hour) %>%
   count() %>%
   ggplot() +
-  geom_point(aes(x=Tweeting.hour,y=n),alpha=.4) +
-  labs(x="Hour",y="Number of Tweets",title="Tweeting by Trump: Hour of Day (EST)")
+  geom_point(aes(x=as.numeric(Tweeting.hour),y=n),alpha=.4) +
+  labs(x="Hour",y="Number of Tweets",title="Tweeting by Trump: Hour of Day (EST)") +
+  scale_x_continuous(n.breaks = 13, limits = c(0,23))
 ```
 
 Did Trump's use to twitter change after he was elected President?  Certainly we would think that the content might change -- as well as how likely it was to be favorited and retweeted -- but how about the frequency and timing of the tweets?   
@@ -173,8 +175,9 @@ tweets %>%
   group_by(PostPresident,Tweeting.hour) %>%
   count() %>%
   ggplot() +
-  geom_point(aes(x=Tweeting.hour,y=n,color=PostPresident),alpha=.4) +
-  labs(x="Hour",y="Number of Tweets",title="Tweeting by Trump: Hour of Day (EST)",color="Is President?")
+  geom_point(aes(x=as.numeric(Tweeting.hour),y=n,color=PostPresident),alpha=.4) +
+  labs(x="Hour",y="Number of Tweets",title="Tweeting by Trump: Hour of Day (EST)",color="Is President?") +
+  scale_x_continuous(n.breaks = 13, limits = c(0,23))
 ```
 
 What do you observe?  
@@ -191,9 +194,10 @@ tweets %>%
   ungroup(Tweeting.hour) %>%
   mutate(Prop = n/sum(n)) %>%
   ggplot() +
-  geom_point(aes(x=Tweeting.hour,y=Prop,color=PostPresident),alpha=.4) +
+  geom_point(aes(x=as.numeric(Tweeting.hour),y=Prop,color=PostPresident),alpha=.4) +
   labs(x="Hour (EST)",y="Percentage of Tweets in Period",title="Tweeting by Trump: Hour of Day (EST)",color="Is President?") + 
-  scale_y_continuous(labels = scales::percent_format(accuracy = 1))
+  scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
+  scale_x_continuous(n.breaks = 13, limits = c(0,23))
 ```
 
 Hmm.  A very different characterization!  Always think about what the right calculation is.  R will do what you tell it -- usually ;) -- but you need to think about what you are asking it to do!  
@@ -205,8 +209,9 @@ tweets %>%
   group_by(Tweeting.year,Tweeting.hour) %>%
   count() %>%
   ggplot() +
-  geom_point(aes(x=Tweeting.hour,y=n,color=Tweeting.year),alpha=.4) +
-  labs(x="Hour",y="Number of Tweets",title="Tweeting by Trump: Hour of Day (EST)",color="Year")
+  geom_point(aes(x=as.numeric(Tweeting.hour),y=n,color=Tweeting.year),alpha=.4) +
+  labs(x="Hour",y="Number of Tweets",title="Tweeting by Trump: Hour of Day (EST)",color="Year") +
+  scale_x_continuous(n.breaks = 13, limits = c(0,23))
 ```
 
 Can you graph the proportion of tweets per hour per year?  How does that change your characterization.  In you opinion, which is the more appropriate measure?  The number of tweets or the proportion of tweets?  Why or why not?
@@ -218,9 +223,10 @@ tweets %>%
   ungroup(Tweeting.hour) %>%
   mutate(Prop = n/sum(n)) %>%
   ggplot() +
-  geom_point(aes(x=Tweeting.hour,y=Prop,color=Tweeting.year),alpha=.4) +
+  geom_point(aes(x=as.numeric(Tweeting.hour),y=Prop,color=Tweeting.year),alpha=.4) +
   labs(x="Hour (EST)",y="Percentage of Tweets in Period",title="Tweeting by Trump: Hour of Day (EST)",color="Year") + 
-  scale_y_continuous(labels = scales::percent_format(accuracy = 1))
+  scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
+  scale_x_continuous(n.breaks = 13, limits = c(0,23))
 ```
 
 
@@ -232,9 +238,10 @@ tweets %>%
   count() %>%
   ggplot() +  
   facet_wrap(~ Tweeting.year, scales = "free_y", nrow = 4) +
-  geom_point(aes(x=Tweeting.hour,y=n,color=Tweeting.year),alpha=.4) +
+  geom_point(aes(x=as.numeric(Tweeting.hour),y=n,color=Tweeting.year),alpha=.4) +
   theme(axis.text.x = element_text(angle = 90, hjust = 1, size=5)) +
-  labs(x="Hour",y="Number of Tweets",title="Tweeting by Trump: Hour of Day (UTC)",color="Year")
+  labs(x="Hour",y="Number of Tweets",title="Tweeting by Trump: Hour of Day (UTC)",color="Year") +
+  scale_x_continuous(n.breaks = 13, limits = c(0,23))
 ```
 
 First try to do the same thing with the tweeting behavior Pre/Post Presidency.  Can you use the `facet_wrap` to create that visualization?  Which visualization do you prefer?
@@ -375,7 +382,7 @@ tweet_words %>%
   coord_flip()
 ```
 
-Interesting.But we want to know how twitter use changed, if at all, over time and in response to being elected president.  So let's start by defining a variation that is `PostPresident` defined to be tweets after being projected as the winner of the 2016 Presidential election.
+Interesting. But we want to know how twitter use changed, if at all, over time and in response to being elected president.  So let's start by defining a variation that is `PostPresident` defined to be tweets after being projected as the winner of the 2016 Presidential election.
 
 NOTE: You could also look at other variation (e.g., years, pre/post certain events, etc.). There are lots of opportunities to expand/refine this! Try some!
 
@@ -513,7 +520,7 @@ where `tf` is the term frequency (word count/total words), `df(w)` is the number
 
 NOTE: what is a document? In theory, a document is a tweet. However, tweets are so short that most words only appear once. Furthermore, there are a LOT of tweets written by Trump over his time on the platform. Instead, we will treat a DAY (`Tweeting.date`) as our "document". Be aware what this implies! We are assuming that Trump's tweets written on a given day are about the same thing. This is obviously not always true, but it is a reasonable assumption to start with.
 
-So let us create an new document-term-matrix object that also includes the `tf`, `idf` and `tf_idf` associated with each word.  
+So let us create a new document-term-matrix object that also includes the `tf`, `idf` and `tf_idf` associated with each word.  
 
 ```{r}
 # Create the dtm with Tweeting.date as the "document".
@@ -571,20 +578,23 @@ How can we summarize?  Want to `gather()` to convert the data to **long** form.
 km_out_tidy <- tidy(km_out) %>%
   gather(word,mean_tfidf,-size,-cluster,-withinss) %>% # Convert to long data (don't add "size", "cluster", and "withinss" to the new "word" column! These are part of the tidy() output!)
   mutate(mean_tfidf = as.numeric(mean_tfidf)) # Calculate average TF-IDF
-km_out_tidy
+km_out_tidy %>%
+  filter(word=="apprentice") %>%
+  print(n=50)
 ```
-This tells us that the word "apprentice" is only weakly associated with topic ("cluster") 3 (0.000296), but is more strongly associated with topic 8 (0.0193) and topic 10 (0.0365). We can also see how many documents (i.e., days) are associated with each topic. Topic 1 only appears once, while topic 3 appears 1,076 times.
+
+This tells us that the word "apprentice" is only weakly associated with topic ("cluster") 7 (0.00285), but is strongly associated with topic 3 (2.58). We can also see how many documents (i.e., days) are associated with each topic. Topic 2 only appears once, while topic 13 appears 3,066 times.
 
 Let's try plotting just the third topic to better understand what it is about. To do this, we want to look at the top 10 highest scoring words according to `mean_tfidf`.
 
 ```{r}
 km_out_tidy %>%
-  filter(cluster %in% 3) %>%
+  filter(cluster %in% 13) %>%
   group_by(cluster) %>%
   arrange(-mean_tfidf) %>%
   slice(1:10)
 ```
-This appears to be about domestic politics! For those who are familiar with Trump's time in office, he would frequently talk about fake news and the media, as well as his flagship policy: the border wall with Mexico.
+This appears to be about domestic politics and elections! For those who are familiar with Trump's time in office, he would frequently talk about former President Obama and his 2016 opponent Hillary Clinton.
 
 We can turn this into a plot for easier visualization (and look at multiple topics at once).
 
@@ -618,7 +628,7 @@ doc_cluster <- data.frame(Tweeting.date = castdtm$dimnames$Docs, # Get the docum
 
 doc_cluster
 ```
-So topic 35 was the focus of Trump's tweets on his first two days on the platform, following by 6 days where he emphasized topic 21.
+So topics 18 and 12 were the focus of Trump's tweets on his first two days on the platform, followed by multiple days where he emphasized topic 6.
 
 Let's plot these to make it easier to see patterns.
 
@@ -632,16 +642,15 @@ doc_cluster %>%
        y = 'Topic Number')
 ```
 
-There are basically 3 (maybe 4?) core topics from our data. Topic 49 is Trump's main focus prior to 2016 when he starts campaigning. Then it shifts to topic 13 throughout the campaign, before settling on topic 3 during his presidency. Let's look at these 3 topics!
+There are basically 3 (maybe 4?) core topics from our data. Topic 7 is Trump's main focus prior to 2016 when he starts campaigning. Then it shifts to topic 13 throughout the campaign and during his presidency. Let's look at these two topics!
 
 ```{r}
 km_out_tidy %>%
-  filter(cluster %in% c(3,13,49)) %>%
+  filter(cluster %in% c(7,13)) %>%
   group_by(cluster) %>%
   arrange(-mean_tfidf) %>%
   slice(1:10) %>%
-  mutate(topic = ifelse(cluster == 3,'3: Post presidency',
-                        ifelse(cluster == 13,'2: Presidential campaign','1: Pre-campaign'))) %>%
+  mutate(topic = ifelse(cluster == 13,'2: Campaign & Pres.','1: Pre-campaign')) %>%
   ggplot(aes(x = mean_tfidf,y = reorder(word,mean_tfidf),
              fill = factor(cluster))) + 
   geom_bar(stat = 'identity') + 
