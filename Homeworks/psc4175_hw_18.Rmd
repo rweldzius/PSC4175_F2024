@@ -26,7 +26,7 @@ Note that you could also look at news coverage using data that people have colle
 As an example of a recent publication in _Nature: Humanities and Social Sciences Communications_ using sentiment analysis see: [Sentiments and emotions evoked by news headlines of coronavirus disease (COVID-19) outbreak](https://www.nature.com/articles/s41599-020-0523-3).  
 
 
-Let's load the packages we are going to us into memory.  You may need to install some of these/
+Let's load the packages we are going to use into memory.  You may need to install some of these.
 
 ```{r, warning= FALSE, message=FALSE}
 library(readr)
@@ -38,11 +38,11 @@ library(scales)
 Just to give you a sense of the preprocessing, here I read in a csv file and did some manipulations
 
 ```{r,eval=F}
-trumptweets <- read_csv("../data/trumptweets.csv")
+trumptweets <- read_csv("https://github.com/rweldzius/PSC4175_F2024/raw/main/Data/trump_tweets.csv")
 #View(trumptweets)
 glimpse(trumptweets)
 tweets <- trumptweets %>%
-  select(id, content, date, retweets, favorites) %>%
+  select(id, text, date, retweets, favorites) %>%
   mutate(date = with_tz(date, "EST"),
          Tweeting.hour = format(date, format = "%H"),
          Tweeting.date = format(date, format = "%Y-%m-%d"),

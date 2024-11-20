@@ -1099,6 +1099,9 @@ set.seed(123)
 c2 <- kmeans(datClust %>% select(-nameParty),centers = 2,nstart = 25)
 
 table(c1$cluster,c2$cluster)
+
+table(c1$cluster)
+table(c2$cluster)
 ```
 
 
