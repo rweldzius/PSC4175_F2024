@@ -556,7 +556,7 @@ $$tf-idf(w,d) = tf(w,d) \times log \left( \frac{N}{df(w)}\right) $$
 ```{r,warning=F,message=F}
 require(tidytext) # Required to calculate TF-IDF
 # install.packages("tm", repos="http://R-Forge.R-project.org") # may need to run this if the next chunk produces an error "there is no package called 'tm'"
-# require(tm)
+require(tm)
 dtm.tfidf <- bind_tf_idf(tbl = dtm, term = word, document = Tweeting.date, n = n) # Calculate TF-IDF
 dtm.tfidf  %>%
   select(word,tf_idf) %>%
