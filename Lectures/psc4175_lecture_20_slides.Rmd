@@ -1,8 +1,8 @@
 ---
 title: "Text, Tweets, and Sentiment"
 subtitle: "Part 3"
-author: "Prof. Bisbee"
-institute: "Vanderbilt University"
+author: "Prof. Ryan Weldzius"
+institute: "Villanova University"
 date: "Slides Updated: `r Sys.Date()`"
 output:
   xaringan::moon_reader:
@@ -46,7 +46,7 @@ knitr::knit_hooks$set(chunk = function(x, options) {
 
 ```{r,message=F,warning=F}
 require(tidyverse)
-tweet_words <- read_rds(file="https://github.com/jbisbee1/DS1000_F2024/raw/main/data/Trump_tweet_words.Rds")
+tweet_words <- read_rds(file="https://github.com/rweldzius/PSC4175_F2024/raw/main/Data/Trump_tweet_words.Rds")
 tweet_words <- tweet_words %>% mutate(PostPresident = Tweeting.date > as.Date('2016-11-06'))
 ```
 
@@ -199,7 +199,7 @@ p
 require(tidytext) # Might need to install.packages('textdata')
 # nrc <- get_sentiments("nrc")
 # If this doesn't work on your computer, just load it with read_rds()
-nrc <- read_rds('https://github.com/jbisbee1/DS1000_F2024/raw/main/data/nrc.Rds')
+nrc <- read_rds('https://github.com/rweldzius/PSC4175_F2024/raw/main/Data/nrc.Rds')
 ```
 
 ---
