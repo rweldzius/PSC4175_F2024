@@ -574,7 +574,7 @@ roc_auc(forAUC,'truth','preds1') %>% mutate(model = 'logodds') %>%
 
 ---
 
-# Pat yourselves on the back. Look how far you've come!
+# Pat yourselves on the back! Look how far you've come...
 
 --
 
