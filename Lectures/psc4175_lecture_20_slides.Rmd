@@ -18,7 +18,7 @@ output:
       highlightStyle: github
       highlightLines: true
       countIncrementalSlides: false
-      #ratio: "16:9"
+      ratio: "16:9"
 
 ---
 
@@ -56,11 +56,29 @@ tweet_words <- tweet_words %>% mutate(PostPresident = Tweeting.date > as.Date('2
 
 - **Odds**: Probability a word is used pre/post presidency
   
-- **Log**: Useful for removing skew in data!
+- **Log**: Useful for removing skew in data
   
 --
 
 - Interactive code time!
+
+```{r, echo=F, out.width = "500px"}
+knitr::include_graphics("figs/shaq.gif")
+```
+
+---
+
+# Odds Step 1
+
+```{r}
+odds1 <- tweet_words %>%
+  count(word, PostPresident) %>%
+  spread(PostPresident, n, fill = 0) %>%
+  ungroup() %>%
+  mutate(totFALSE = sum(`FALSE`),
+         totTRUE = sum(`TRUE`))
+```
+
 
 ---
 
@@ -69,7 +87,6 @@ tweet_words <- tweet_words %>% mutate(PostPresident = Tweeting.date > as.Date('2
 ```{r}
 (odds1 <- tweet_words %>%
   count(word, PostPresident) %>%
-  filter(sum(n) >= 5) %>%
   spread(PostPresident, n, fill = 0) %>%
   ungroup() %>%
   mutate(totFALSE = sum(`FALSE`),
@@ -122,7 +139,8 @@ odds3 %>%
 
 ```{r}
 (prepost_logodds <- odds3 %>%
-  mutate(logodds = log(odds)))
+  mutate(logodds = log(odds))) %>%
+  select(word,logodds,odds,everything())
 ```
 
 ---
@@ -147,7 +165,7 @@ p <- prepost_logodds %>%
 
 # Effect of becoming president
 
-```{r}
+```{r,out.width = "800px"}
 p
 ```
 
@@ -223,11 +241,11 @@ nrc
 --
 
 ```{r}
-word_freq <- tweet_words %>%
+(word_freq <- tweet_words %>%
   group_by(PostPresident) %>%
   count(word) %>%
   filter(sum(n) >= 5) %>%
-   mutate(prop = prop.table(n)) # Faster way of calculating proportions!
+  mutate(prop = prop.table(n))) # Faster way of calculating proportions!
 ```
 
 ---
@@ -262,7 +280,7 @@ p <- word_freq_sentiment %>%
 
 ---
 
-# Sentiment Overall
+# Sentiment overall
 
 ```{r}
 p
@@ -298,7 +316,8 @@ tweet_sentiment_summary <- tweet_sentiment %>%
 # Sentiment overall
 
 ```{r}
-tweet_sentiment_summary
+tweet_sentiment_summary %>%
+  select(PostPresident,document,sentiment,everything())
 ```
 
 ---
@@ -313,7 +332,8 @@ tweet_sentiment_summary
 tweet_sentiment_summary  %>%
   group_by(PostPresident) %>%
   mutate(ntweet = 1) %>%
-  summarize(across(-document, sum)) 
+  summarize(across(-document, sum)) %>%
+  select(PostPresident,sentiment,everything())
 ```
 
 ---
@@ -360,10 +380,11 @@ p <- tweet_sentiment %>%
   pivot_wider(names_from = sentiment, values_from = n, values_fill = 0) %>% 
   mutate(sentiment = positive - negative) %>%
   summarize(AvgSentiment = mean(sentiment)) %>%
-  ggplot(aes(y = AvgSentiment, x= Tweeting.hour, color=PostPresident)) + 
+  ggplot(aes(y = AvgSentiment, x= as.integer(Tweeting.hour), color=PostPresident)) + 
   geom_point(size = 4) +
   geom_hline(yintercept = 0,linetype = 'dashed') + 
-  labs(x = "Tweeting Hour (EST)", y = "Average Tweet Sentiment: Positive - Negative", color = "Is President?")
+  labs(x = "Tweeting Hour (EST)", y = "Average Tweet Sentiment: Positive - Negative", color = "Is President?") +
+  scale_x_continuous(n.breaks = 13, limits = c(0,23))
 ```
 
 ---
@@ -410,7 +431,7 @@ p <- prepost_logodds %>%
 
 # Understanding Trump
 
-```{r}
+```{r,out.width = "800px"}
 p
 ```
 
@@ -436,14 +457,14 @@ p
 - Predict tweets by average of words' log-odds!
 
 ```{r,message=F}
-toanal <- tweet_words %>%
+toanalyze <- tweet_words %>%
   select(document,word,PostPresident) %>%
   left_join(prepost_logodds %>% select(word,logodds)) %>% # Link data with log-odds
   group_by(document,PostPresident) %>%
   summarise(logodds = mean(logodds)) %>% # Calculate average log-odds by document
   ungroup()
 
-m <- glm(PostPresident ~ logodds,toanal,family = binomial) # logit regression
+m <- glm(PostPresident ~ logodds,toanalyze,family = binomial) # logit regression
 ```
 
 ---
@@ -454,7 +475,7 @@ m <- glm(PostPresident ~ logodds,toanal,family = binomial) # logit regression
 
 ```{r,message=F,warning=F}
 require(tidymodels)
-forAUC <- toanal %>% # Evaluate model performance
+forAUC <- toanalyze %>% # Evaluate model performance
   mutate(preds = predict(m,type = 'response'),
          truth = factor(PostPresident,levels = c('TRUE','FALSE')))
 
@@ -479,7 +500,7 @@ p
 # Evaluate on some sample tweets
 
 ```{r}
-raw_tweets <- read_rds('../data/Trumptweets.Rds')
+raw_tweets <- read_rds('../Data/Trumptweets.Rds')
 set.seed(20)
 toCheck <- raw_tweets %>% slice(sample(1:nrow(.),size = 10))
 
@@ -492,7 +513,7 @@ toCheck %>%
 # Evaluate on some sample tweets
 
 ```{r}
-toTest <- toCheck %>% left_join(toanal,by = c('id' = 'document')) # Merge the raw text with the log-odds
+toTest <- toCheck %>% left_join(toanalyze,by = c('id' = 'document')) # Merge the raw text with the log-odds
 
 toTest %>%
   mutate(preds = predict(m,newdata = toTest,type = 'response')) %>%
@@ -508,15 +529,15 @@ toTest %>%
 # Can we do better if we add sentiment?
 
 ```{r}
-toanal <- toanal %>%
+toanalyze <- toanalyze %>%
   left_join(tweet_sentiment_summary) %>%
   drop_na()
 
-m1 <- glm(PostPresident ~ logodds,toanal,family = binomial)
-m2 <- glm(PostPresident ~ logodds + sentiment,toanal,family = binomial)
-m3 <- glm(PostPresident ~ logodds + anger + anticipation + disgust + fear + joy + sadness + surprise + trust,toanal,family = binomial)
+m1 <- glm(PostPresident ~ logodds,toanalyze,family = binomial)
+m2 <- glm(PostPresident ~ logodds + sentiment,toanalyze,family = binomial)
+m3 <- glm(PostPresident ~ logodds + anger + anticipation + disgust + fear + joy + sadness + surprise + trust,toanalyze,family = binomial)
 
-forAUC <- toanal %>%
+forAUC <- toanalyze %>%
   mutate(preds1 = predict(m1,type = 'response'),
          preds2 = predict(m2,type = 'response'),
          preds3 = predict(m3,type = 'response'),
@@ -529,8 +550,10 @@ forAUC <- toanal %>%
 
 ```{r}
 roc_auc(forAUC,'truth','preds1') %>% mutate(model = 'logodds') %>%
-  bind_rows(roc_auc(forAUC,'truth','preds2') %>% mutate(model = 'logodds & net sentiment')) %>%
-  bind_rows(roc_auc(forAUC,'truth','preds3') %>% mutate(model = 'logodds & detailed sentiment'))
+  bind_rows(roc_auc(forAUC,'truth','preds2') %>% 
+              mutate(model = 'logodds & net sentiment')) %>%
+  bind_rows(roc_auc(forAUC,'truth','preds3') %>% 
+              mutate(model = 'logodds & detailed sentiment'))
 ```
 
 --
@@ -548,3 +571,68 @@ roc_auc(forAUC,'truth','preds1') %>% mutate(model = 'logodds') %>%
   - ...help us describe the data (i.e., infer what someone meant)
   
   - ...help us predict the data (RQ: do positive tweets get more likes?)
+
+---
+
+# Pat yourselves on the back. Look how far you've come!
+
+--
+
+- Week 1-3: R basics, ggplot, and **MORE ggplot**!!
+
+--
+
+- Week 4: Data wrangling and univariate analysis (**AND MORE ggplot!**)
+
+--
+
+- Week 5-6: Multivariate analysis (conditional means)
+
+--
+
+- Week 7: Uncertainty
+
+--
+
+- Week 8-9: Midterm and Fall Break 
+
+--
+
+- Week 10-11: Linear regression
+
+--
+
+- Week 12-13: Logistic regression
+
+--
+
+- Week 14-15: K-means clustering and Natural Language Processing
+
+--
+
+- $\color{blue}{\text{Week 16-17: Final project workshop and mini-conference}}$
+
+--
+
+- $\color{blue}{\text{December 18: Final projects due and take-home final exam distributed (if needed)}}$
+
+---
+
+# Conclusion
+
+- Homework:
+
+  - Problem set 8 **due Wednesday**. LAST ONE!
+  
+  - Come next Monday with your data for the final project
+  
+--
+  
+- Quiz (also the last one!)
+
+  - Go to gosocrative.com; room name PSC4175
+
+```{r, echo=F, out.width = "500px"}
+knitr::include_graphics("https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExenJ0MHFkMXZ0Y3oyMHAwMzJoa3Q4Y29mdms5eHh1a3FyaWg3NnVyciZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3ohzdIuqJoo8QdKlnW/giphy.gif")
+```  
+

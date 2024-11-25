@@ -149,7 +149,7 @@ Provide an explanation for why the *k*-means results are so much more helpful wh
 
 
 ## Question 0.B
-Require `tidyverse`, `tidytext` and `tidymodels`, and then load the [`Trump_tweet_words.Rds`](https://github.com/rweldzius/PSC4175_S2024/raw/main/Data/Trump_tweet_words.Rds) data to an object called `tweet_words`.
+Require `tidyverse`, `tidytext` and `tidymodels`, and then load the [`Trump_tweet_words.Rds`](https://github.com/rweldzius/PSC4175_F2024/raw/main/Data/Trump_tweet_words.Rds) data to an object called `tweet_words`.
 ```{r,warning=F,message=F}
 # INSERT CODE HERE
 ```
@@ -276,7 +276,7 @@ km_out_tidy %>%
 >- Write answer here
 
 ## Question 6 [1 point]
-Now load the sentiment dictionary `nrc` from the `tidytext` package, and look at the clusters with sentiment scores by merging the `km_out_tidy` dataset with the `nrc` dataset using the `inner_join()` function. (If you can't open the `nrc` object from the `tidytext` package, you can just load it from GitHub with this link: `https://github.com/rweldzius/PSC4175_S2024/raw/main/Data/nrc.Rds`)
+Now load the sentiment dictionary `nrc` from the `tidytext` package, and look at the clusters with sentiment scores by merging the `km_out_tidy` dataset with the `nrc` dataset using the `inner_join()` function. (If you can't open the `nrc` object from the `tidytext` package, you can just load it from GitHub with this link: `https://github.com/rweldzius/PSC4175_F2024/raw/main/Data/nrc.Rds`)
 
 Filter to only look at `positive` and `negative` categories and then `select()` only the `size`, `cluster`, `word`, `mean_tfidf`, and `sentiment` columns. Then use either `spread()` or `pivot_wider()` to create two columns of `mean_tfidf` values: one for `positive` and one for `negative`. Replace `NA` values with 0! Finally, filter to only look at clusters with more than 10 tweets in them. Save this processed data to an object named `cluster_sentiment`.
 

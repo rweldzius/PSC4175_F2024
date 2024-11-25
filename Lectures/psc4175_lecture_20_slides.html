@@ -26,7 +26,7 @@ class: center, middle, inverse, title-slide
 ### Villanova University
 ]
 .date[
-### Slides Updated: 2024-11-21
+### Slides Updated: 2024-11-25
 ]
 
 ---
@@ -58,11 +58,28 @@ tweet_words &lt;- tweet_words %&gt;% mutate(PostPresident = Tweeting.date &gt; a
 
 - **Odds**: Probability a word is used pre/post presidency
   
-- **Log**: Useful for removing skew in data!
+- **Log**: Useful for removing skew in data
   
 --
 
 - Interactive code time!
+
+&lt;img src="figs/shaq.gif" width="500px" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Odds Step 1
+
+
+``` r
+odds1 &lt;- tweet_words %&gt;%
+  count(word, PostPresident) %&gt;%
+  spread(PostPresident, n, fill = 0) %&gt;%
+  ungroup() %&gt;%
+  mutate(totFALSE = sum(`FALSE`),
+         totTRUE = sum(`TRUE`))
+```
+
 
 ---
 
@@ -72,7 +89,6 @@ tweet_words &lt;- tweet_words %&gt;% mutate(PostPresident = Tweeting.date &gt; a
 ``` r
 (odds1 &lt;- tweet_words %&gt;%
   count(word, PostPresident) %&gt;%
-  filter(sum(n) &gt;= 5) %&gt;%
   spread(PostPresident, n, fill = 0) %&gt;%
   ungroup() %&gt;%
   mutate(totFALSE = sum(`FALSE`),
@@ -163,7 +179,7 @@ odds3 %&gt;%
   geom_histogram()
 ```
 
-&lt;img src="psc4175_lecture_20_slides_files/figure-html/unnamed-chunk-7-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="psc4175_lecture_20_slides_files/figure-html/unnamed-chunk-9-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 
@@ -177,7 +193,7 @@ odds3 %&gt;%
   scale_x_log10()
 ```
 
-&lt;img src="psc4175_lecture_20_slides_files/figure-html/unnamed-chunk-8-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="psc4175_lecture_20_slides_files/figure-html/unnamed-chunk-10-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 
@@ -186,25 +202,26 @@ odds3 %&gt;%
 
 ``` r
 (prepost_logodds &lt;- odds3 %&gt;%
-  mutate(logodds = log(odds)))
+  mutate(logodds = log(odds))) %&gt;%
+  select(word,logodds,odds,everything())
 ```
 
 ```
 ## # A tibble: 45,221 × 9
-##    word   `FALSE` `TRUE` totFALSE totTRUE propFALSE propTRUE
-##    &lt;chr&gt;    &lt;dbl&gt;  &lt;dbl&gt;    &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
-##  1 a            6     27   189217  257487   3.70e-5  1.09e-4
-##  2 aa           1      2   189217  257487   1.06e-5  1.17e-5
-##  3 aaa         11      1   189217  257487   6.34e-5  7.77e-6
-##  4 aamp         1      0   189217  257487   1.06e-5  3.88e-6
-##  5 aand         0      1   189217  257487   5.28e-6  7.77e-6
-##  6 aaron        2      1   189217  257487   1.59e-5  7.77e-6
-##  7 ab           1      2   189217  257487   1.06e-5  1.17e-5
-##  8 abaco        0      1   189217  257487   5.28e-6  7.77e-6
-##  9 aband…       6      8   189217  257487   3.70e-5  3.50e-5
-## 10 aband…      13     11   189217  257487   7.40e-5  4.66e-5
+##    word      logodds  odds `FALSE` `TRUE` totFALSE totTRUE
+##    &lt;chr&gt;       &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;    &lt;dbl&gt;   &lt;dbl&gt;
+##  1 a          1.08   2.94        6     27   189217  257487
+##  2 aa         0.0974 1.10        1      2   189217  257487
+##  3 aaa       -2.10   0.122      11      1   189217  257487
+##  4 aamp      -1.00   0.367       1      0   189217  257487
+##  5 aand       0.385  1.47        0      1   189217  257487
+##  6 aaron     -0.714  0.490       2      1   189217  257487
+##  7 ab         0.0974 1.10        1      2   189217  257487
+##  8 abaco      0.385  1.47        0      1   189217  257487
+##  9 abandon   -0.0568 0.945       6      8   189217  257487
+## 10 abandoned -0.462  0.630      13     11   189217  257487
 ## # ℹ 45,211 more rows
-## # ℹ 2 more variables: odds &lt;dbl&gt;, logodds &lt;dbl&gt;
+## # ℹ 2 more variables: propFALSE &lt;dbl&gt;, propTRUE &lt;dbl&gt;
 ```
 
 ---
@@ -235,7 +252,7 @@ p &lt;- prepost_logodds %&gt;%
 p
 ```
 
-&lt;img src="psc4175_lecture_20_slides_files/figure-html/unnamed-chunk-11-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="psc4175_lecture_20_slides_files/figure-html/unnamed-chunk-13-1.png" width="800px" style="display: block; margin: auto;" /&gt;
 
 ---
 
@@ -329,11 +346,29 @@ nrc
 
 
 ``` r
-word_freq &lt;- tweet_words %&gt;%
+(word_freq &lt;- tweet_words %&gt;%
   group_by(PostPresident) %&gt;%
   count(word) %&gt;%
   filter(sum(n) &gt;= 5) %&gt;%
-   mutate(prop = prop.table(n)) # Faster way of calculating proportions!
+  mutate(prop = prop.table(n))) # Faster way of calculating proportions!
+```
+
+```
+## # A tibble: 54,438 × 4
+## # Groups:   PostPresident [2]
+##    PostPresident word           n       prop
+##    &lt;lgl&gt;         &lt;chr&gt;      &lt;int&gt;      &lt;dbl&gt;
+##  1 FALSE         a              6 0.0000317 
+##  2 FALSE         aa             1 0.00000528
+##  3 FALSE         aaa           11 0.0000581 
+##  4 FALSE         aamp           1 0.00000528
+##  5 FALSE         aaron          2 0.0000106 
+##  6 FALSE         ab             1 0.00000528
+##  7 FALSE         abandon        6 0.0000317 
+##  8 FALSE         abandoned     13 0.0000687 
+##  9 FALSE         abbott         1 0.00000528
+## 10 FALSE         abbottabad     1 0.00000528
+## # ℹ 54,428 more rows
 ```
 
 ---
@@ -370,14 +405,14 @@ p &lt;- word_freq_sentiment %&gt;%
 
 ---
 
-# Sentiment Overall
+# Sentiment overall
 
 
 ``` r
 p
 ```
 
-&lt;img src="psc4175_lecture_20_slides_files/figure-html/unnamed-chunk-17-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="psc4175_lecture_20_slides_files/figure-html/unnamed-chunk-19-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 
@@ -411,28 +446,29 @@ tweet_sentiment_summary &lt;- tweet_sentiment %&gt;%
 
 
 ``` r
-tweet_sentiment_summary
+tweet_sentiment_summary %&gt;%
+  select(PostPresident,document,sentiment,everything())
 ```
 
 ```
 ## # A tibble: 45,592 × 13
 ## # Groups:   PostPresident [2]
-##    PostPresident   document anger anticipation disgust  fear
-##    &lt;lgl&gt;              &lt;dbl&gt; &lt;int&gt;        &lt;int&gt;   &lt;int&gt; &lt;int&gt;
-##  1 FALSE         1701461182     1            3       1     0
-##  2 FALSE         1741160716     1            1       1     0
-##  3 FALSE         1924074459     1            1       0     0
-##  4 FALSE         2045871770     1            0       0     0
-##  5 FALSE         2317112756     1            0       0     1
-##  6 FALSE         2346367430     2            1       1     2
-##  7 FALSE         2403435685     1            2       1     2
-##  8 FALSE         3688564134     1            0       1     1
-##  9 FALSE         7677152231     1            1       1     0
-## 10 FALSE         8083871612     1            1       1     0
+##    PostPresident   document sentiment anger anticipation
+##    &lt;lgl&gt;              &lt;dbl&gt;     &lt;int&gt; &lt;int&gt;        &lt;int&gt;
+##  1 FALSE         1701461182         1     1            3
+##  2 FALSE         1741160716         0     1            1
+##  3 FALSE         1924074459         0     1            1
+##  4 FALSE         2045871770        -1     1            0
+##  5 FALSE         2317112756        -1     1            0
+##  6 FALSE         2346367430        -1     2            1
+##  7 FALSE         2403435685         2     1            2
+##  8 FALSE         3688564134        -2     1            0
+##  9 FALSE         7677152231         0     1            1
+## 10 FALSE         8083871612         0     1            1
 ## # ℹ 45,582 more rows
-## # ℹ 7 more variables: joy &lt;int&gt;, negative &lt;int&gt;,
-## #   positive &lt;int&gt;, sadness &lt;int&gt;, surprise &lt;int&gt;,
-## #   trust &lt;int&gt;, sentiment &lt;int&gt;
+## # ℹ 8 more variables: disgust &lt;int&gt;, fear &lt;int&gt;, joy &lt;int&gt;,
+## #   negative &lt;int&gt;, positive &lt;int&gt;, sadness &lt;int&gt;,
+## #   surprise &lt;int&gt;, trust &lt;int&gt;
 ```
 
 ---
@@ -448,18 +484,19 @@ tweet_sentiment_summary
 tweet_sentiment_summary  %&gt;%
   group_by(PostPresident) %&gt;%
   mutate(ntweet = 1) %&gt;%
-  summarize(across(-document, sum)) 
+  summarize(across(-document, sum)) %&gt;%
+  select(PostPresident,sentiment,everything())
 ```
 
 ```
 ## # A tibble: 2 × 13
-##   PostPresident anger anticipation disgust  fear   joy
-##   &lt;lgl&gt;         &lt;int&gt;        &lt;int&gt;   &lt;int&gt; &lt;int&gt; &lt;int&gt;
-## 1 FALSE          8138        13333    5356  7999 12440
-## 2 TRUE          13892        14095    8933 14051 10973
-## # ℹ 7 more variables: negative &lt;int&gt;, positive &lt;int&gt;,
-## #   sadness &lt;int&gt;, surprise &lt;int&gt;, trust &lt;int&gt;,
-## #   sentiment &lt;int&gt;, ntweet &lt;dbl&gt;
+##   PostPresident sentiment anger anticipation disgust  fear
+##   &lt;lgl&gt;             &lt;int&gt; &lt;int&gt;        &lt;int&gt;   &lt;int&gt; &lt;int&gt;
+## 1 FALSE             12372  8138        13333    5356  7999
+## 2 TRUE               5823 13892        14095    8933 14051
+## # ℹ 7 more variables: joy &lt;int&gt;, negative &lt;int&gt;,
+## #   positive &lt;int&gt;, sadness &lt;int&gt;, surprise &lt;int&gt;,
+## #   trust &lt;int&gt;, ntweet &lt;dbl&gt;
 ```
 
 ---
@@ -491,7 +528,7 @@ p &lt;- tweet_sentiment_summary %&gt;%
 p
 ```
 
-&lt;img src="psc4175_lecture_20_slides_files/figure-html/unnamed-chunk-22-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="psc4175_lecture_20_slides_files/figure-html/unnamed-chunk-24-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 
@@ -511,10 +548,11 @@ p &lt;- tweet_sentiment %&gt;%
   pivot_wider(names_from = sentiment, values_from = n, values_fill = 0) %&gt;% 
   mutate(sentiment = positive - negative) %&gt;%
   summarize(AvgSentiment = mean(sentiment)) %&gt;%
-  ggplot(aes(y = AvgSentiment, x= Tweeting.hour, color=PostPresident)) + 
+  ggplot(aes(y = AvgSentiment, x= as.integer(Tweeting.hour), color=PostPresident)) + 
   geom_point(size = 4) +
   geom_hline(yintercept = 0,linetype = 'dashed') + 
-  labs(x = "Tweeting Hour (EST)", y = "Average Tweet Sentiment: Positive - Negative", color = "Is President?")
+  labs(x = "Tweeting Hour (EST)", y = "Average Tweet Sentiment: Positive - Negative", color = "Is President?") +
+  scale_x_continuous(n.breaks = 13, limits = c(0,23))
 ```
 
 ---
@@ -528,7 +566,7 @@ p &lt;- tweet_sentiment %&gt;%
 p
 ```
 
-&lt;img src="psc4175_lecture_20_slides_files/figure-html/unnamed-chunk-24-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="psc4175_lecture_20_slides_files/figure-html/unnamed-chunk-26-1.png" style="display: block; margin: auto;" /&gt;
 
 
 ---
@@ -570,7 +608,7 @@ p &lt;- prepost_logodds %&gt;%
 p
 ```
 
-&lt;img src="psc4175_lecture_20_slides_files/figure-html/unnamed-chunk-26-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="psc4175_lecture_20_slides_files/figure-html/unnamed-chunk-28-1.png" width="800px" style="display: block; margin: auto;" /&gt;
 
 ---
 
@@ -595,14 +633,14 @@ p
 
 
 ``` r
-toanal &lt;- tweet_words %&gt;%
+toanalyze &lt;- tweet_words %&gt;%
   select(document,word,PostPresident) %&gt;%
   left_join(prepost_logodds %&gt;% select(word,logodds)) %&gt;% # Link data with log-odds
   group_by(document,PostPresident) %&gt;%
   summarise(logodds = mean(logodds)) %&gt;% # Calculate average log-odds by document
   ungroup()
 
-m &lt;- glm(PostPresident ~ logodds,toanal,family = binomial) # logit regression
+m &lt;- glm(PostPresident ~ logodds,toanalyze,family = binomial) # logit regression
 ```
 
 ---
@@ -614,7 +652,7 @@ m &lt;- glm(PostPresident ~ logodds,toanal,family = binomial) # logit regression
 
 ``` r
 require(tidymodels)
-forAUC &lt;- toanal %&gt;% # Evaluate model performance
+forAUC &lt;- toanalyze %&gt;% # Evaluate model performance
   mutate(preds = predict(m,type = 'response'),
          truth = factor(PostPresident,levels = c('TRUE','FALSE')))
 
@@ -644,7 +682,7 @@ p &lt;- roc_curve(forAUC,'truth','preds') %&gt;%
 p
 ```
 
-&lt;img src="psc4175_lecture_20_slides_files/figure-html/unnamed-chunk-29-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="psc4175_lecture_20_slides_files/figure-html/unnamed-chunk-31-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 
@@ -652,7 +690,7 @@ p
 
 
 ``` r
-raw_tweets &lt;- read_rds('../data/Trumptweets.Rds')
+raw_tweets &lt;- read_rds('../Data/Trumptweets.Rds')
 set.seed(20)
 toCheck &lt;- raw_tweets %&gt;% slice(sample(1:nrow(.),size = 10))
 
@@ -682,7 +720,7 @@ toCheck %&gt;%
 
 
 ``` r
-toTest &lt;- toCheck %&gt;% left_join(toanal,by = c('id' = 'document')) # Merge the raw text with the log-odds
+toTest &lt;- toCheck %&gt;% left_join(toanalyze,by = c('id' = 'document')) # Merge the raw text with the log-odds
 
 toTest %&gt;%
   mutate(preds = predict(m,newdata = toTest,type = 'response')) %&gt;%
@@ -711,15 +749,15 @@ toTest %&gt;%
 
 
 ``` r
-toanal &lt;- toanal %&gt;%
+toanalyze &lt;- toanalyze %&gt;%
   left_join(tweet_sentiment_summary) %&gt;%
   drop_na()
 
-m1 &lt;- glm(PostPresident ~ logodds,toanal,family = binomial)
-m2 &lt;- glm(PostPresident ~ logodds + sentiment,toanal,family = binomial)
-m3 &lt;- glm(PostPresident ~ logodds + anger + anticipation + disgust + fear + joy + sadness + surprise + trust,toanal,family = binomial)
+m1 &lt;- glm(PostPresident ~ logodds,toanalyze,family = binomial)
+m2 &lt;- glm(PostPresident ~ logodds + sentiment,toanalyze,family = binomial)
+m3 &lt;- glm(PostPresident ~ logodds + anger + anticipation + disgust + fear + joy + sadness + surprise + trust,toanalyze,family = binomial)
 
-forAUC &lt;- toanal %&gt;%
+forAUC &lt;- toanalyze %&gt;%
   mutate(preds1 = predict(m1,type = 'response'),
          preds2 = predict(m2,type = 'response'),
          preds3 = predict(m3,type = 'response'),
@@ -733,8 +771,10 @@ forAUC &lt;- toanal %&gt;%
 
 ``` r
 roc_auc(forAUC,'truth','preds1') %&gt;% mutate(model = 'logodds') %&gt;%
-  bind_rows(roc_auc(forAUC,'truth','preds2') %&gt;% mutate(model = 'logodds &amp; net sentiment')) %&gt;%
-  bind_rows(roc_auc(forAUC,'truth','preds3') %&gt;% mutate(model = 'logodds &amp; detailed sentiment'))
+  bind_rows(roc_auc(forAUC,'truth','preds2') %&gt;% 
+              mutate(model = 'logodds &amp; net sentiment')) %&gt;%
+  bind_rows(roc_auc(forAUC,'truth','preds3') %&gt;% 
+              mutate(model = 'logodds &amp; detailed sentiment'))
 ```
 
 ```
@@ -761,13 +801,77 @@ roc_auc(forAUC,'truth','preds1') %&gt;% mutate(model = 'logodds') %&gt;%
   - ...help us describe the data (i.e., infer what someone meant)
   
   - ...help us predict the data (RQ: do positive tweets get more likes?)
+
+---
+
+# Pat yourselves on the back. Look how far you've come!
+
+--
+
+- Week 1-3: R basics, ggplot, and **MORE ggplot**!!
+
+--
+
+- Week 4: Data wrangling and univariate analysis (**AND MORE ggplot!**)
+
+--
+
+- Week 5-6: Multivariate analysis (conditional means)
+
+--
+
+- Week 7: Uncertainty
+
+--
+
+- Week 8-9: Midterm and Fall Break 
+
+--
+
+- Week 10-11: Linear regression
+
+--
+
+- Week 12-13: Logistic regression
+
+--
+
+- Week 14-15: K-means clustering and Natural Language Processing
+
+--
+
+- `\(\color{blue}{\text{Week 16-17: Final project workshop and mini-conference}}\)`
+
+--
+
+- `\(\color{blue}{\text{December 18: Final projects due and take-home final exam distributed (if needed)}}\)`
+
+---
+
+# Conclusion
+
+- Homework:
+
+  - Problem set 8 **due Wednesday**. LAST ONE!
+  
+  - Come next Monday with your data for the final project
+  
+--
+  
+- Quiz (also the last one!)
+
+  - Go to gosocrative.com; room name PSC4175
+
+&lt;img src="https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExenJ0MHFkMXZ0Y3oyMHAwMzJoa3Q4Y29mdms5eHh1a3FyaWg3NnVyciZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3ohzdIuqJoo8QdKlnW/giphy.gif" width="500px" style="display: block; margin: auto;" /&gt;
+
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="libs/remark-latest.min.js"></script>
 <script>var slideshow = remark.create({
 "highlightStyle": "github",
 "highlightLines": true,
-"countIncrementalSlides": false
+"countIncrementalSlides": false,
+"ratio": "16:9"
 });
 if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
   window.dispatchEvent(new Event('resize'));
