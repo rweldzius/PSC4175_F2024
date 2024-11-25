@@ -199,7 +199,7 @@ Villanova University makes every reasonable effort to allow members of the commu
 | 11/13/24 | Guest Lecture | TBD |  |  | |
 | 11/18/24 | Clustering | k-means clustering | [Lecture 18](https://rweldzius.github.io/PSC4175_F2024/Lectures/psc4175_lecture_18_slides.html) | [HW 18](https://github.com/rweldzius/PSC4175_F2024/blob/main/Homeworks/psc4175_hw_18.Rmd) | [PS 8](https://github.com/rweldzius/psc4175_F2024/blob/main/Psets/psc4175_pset_8.Rmd) |
 | 11/20/24 | NLP 1 | k-means clustering on text | [Lecture 19](https://rweldzius.github.io/PSC4175_F2024/Lectures/psc4175_lecture_19_slides.html) | [HW 19](https://github.com/rweldzius/PSC4175_F2024/blob/main/Homeworks/psc4175_hw_19.Rmd) | |
-| 11/25/24 | NLP 2 | Sentiment analysis |  | | |
+| 11/25/24 | NLP 2 | Sentiment analysis | [Lecture 20](https://rweldzius.github.io/PSC4175_F2024/Lectures/psc4175_lecture_20_slides.html)  | | |
 | 11/27/24 | No Class |  |  | | |
 | 12/2/24 | Review Session & discuss final projects | |  | | |
 | 12/4/24 | In-class work on final projects | |  | | |
