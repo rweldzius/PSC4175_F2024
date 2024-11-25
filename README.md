@@ -21,7 +21,7 @@ The main text for the course is "R For Data Science" which can be assessed free 
 
 Villanova has an enterprise site license for Microsoft’s Copilot chat application, which is built off of Open A.I.  Copilot is available to all faculty, staff, and students [here](https://copilot.microsoft.com).
 
-**Class time and location**: M/W 3:20-4:35 in St. Mary's 163C.
+**Class time and location**: M/W 3:20-4:35 in Bartley Hall 2073.
 
 [Back to ToC](#table-of-contents)
 
